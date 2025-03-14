@@ -1,0 +1,57 @@
+<form [formGroup]="dynamicForm" (ngSubmit)="submit()">
+  <div *ngFor="let field of formData">
+    <ng-container *ngIf="!field.visibleIf || dynamicForm.get('userType')?.value === field.visibleIf['userType'].valueOf()">
+      @switch (field.type) {
+        @case ('input') {
+          <label>{{ field.label }}</label>
+          <input [formControlName]="field.name" [id]="field.name" type="text" />
+        }
+        @case ('dropdown') {
+          <label>{{ field.label }}</label>
+          @if (field.name == 'country') {
+            <mat-select [id]="field.name" [formControlName]="field.name">
+              @for (option of lstCountries | async; track option) {
+                <mat-option [value]="option.name">{{ option.name }}</mat-option>
+              }
+            </mat-select>
+          } @else if (field.name != 'country') {
+          <mat-select [id]="field.name" [formControlName]="field.name">
+            @for (option of field.options; track option) {
+              <mat-option [value]="option">{{ option }}</mat-option>
+            }
+          </mat-select>
+          }
+        }
+        @case ('checkbox') {
+          <label>
+            <input type="checkbox" [formControlName]="field.name"/> {{ field.label }}
+          </label>
+        }
+        @case ('group') {
+          <fieldset [formGroupName]="field.name">
+            <legend>{{ field.label }}</legend>
+            <div *ngFor="let nestedField of field.fields">
+              <label>{{ nestedField.label }}</label>
+              @switch (nestedField.type) {
+                @case ('input') {
+                  <input [formControlName]="nestedField.name" [id]="nestedField.name" type="text" />
+                }
+                @case ('dropdown') {
+                  <select [id]="nestedField.name" [formControlName]="nestedField.name">
+                    @for (option of nestedField.options; track option) {
+                      <option [value]="option">{{ option }}</option>
+                    }
+                  </select>
+                }
+              }
+            </div>
+          </fieldset>
+        }
+      }
+      <div *ngIf="dynamicForm.controls[field.name].invalid && dynamicForm.controls[field.name].touched">
+        <small>{{ field.label }} is required.</small>
+      </div>
+    </ng-container>
+  </div>
+  <button type="submit" >Submit</button>
+</form>
