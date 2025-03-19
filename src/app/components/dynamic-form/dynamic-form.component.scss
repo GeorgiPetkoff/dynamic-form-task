@@ -1,0 +1,72 @@
+form {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+fieldset {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  background: #f9f9f9;
+}
+
+legend {
+  font-weight: bold;
+  padding: 0 10px;
+  color: #333;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.radio-group, .checkbox-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+small {
+  color: red;
+  font-size: 12px;
+  display: block;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: #007bff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:disabled {
+  background: gray;
+  cursor: not-allowed;
+}
+input:not([type='checkbox']):not([type='radio']), textarea {
+  width: 100%;
+}
+input:not([type='checkbox']):not([type='radio']) {
+  height: 36px;
+}
+div.col-4 {
+  place-content: center;
+}

@@ -1,0 +1,22 @@
+{
+  "countries": [
+    { "id": 1, "name": "USA" },
+    { "id": 2, "name": "Canada" },
+    { "id": 3, "name": "UK" },
+    { "id": 4, "name": "Australia" }
+  ],
+  "cities": [
+    { "id": 1, "name": "New York", "countryId": 1 },
+    { "id": 2, "name": "Los Angeles", "countryId": 1 },
+    { "id": 3, "name": "Chicago", "countryId": 1 },
+    { "id": 4, "name": "Toronto", "countryId": 2 },
+    { "id": 5, "name": "Vancouver", "countryId": 2 },
+    { "id": 6, "name": "Montreal", "countryId": 2 },
+    { "id": 7, "name": "London", "countryId": 3 },
+    { "id": 8, "name": "Manchester", "countryId": 3 },
+    { "id": 9, "name": "Birmingham", "countryId": 3 },
+    { "id": 10, "name": "Sydney", "countryId": 4 },
+    { "id": 11, "name": "Melbourne", "countryId": 4 },
+    { "id": 12, "name": "Brisbane", "countryId": 4 }
+  ]
+}
