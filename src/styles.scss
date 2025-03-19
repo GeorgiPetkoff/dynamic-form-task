@@ -1,4 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+@import "@angular/material/prebuilt-themes/indigo-pink.css"; 
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+mat-form-field {
+  width: 100%;
+}
+
+/* Ensure border visibility */
+mat-select {
+  background: white;
+  border: 1px solid rgb(118, 118, 118);
+  border-radius: 4px;
+  padding: 5px;
+}
+mat-select:focus {
+  border: 1px solid black;
+}
+
+/* Fix transparent dropdown issue */
+.mat-select-panel {
+  background: white !important;
+  color: black !important;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.mat-option {
+  font-size: 14px;
+  color: black !important;
+}
+
+.mat-option:hover {
+  background: black!important;
+}

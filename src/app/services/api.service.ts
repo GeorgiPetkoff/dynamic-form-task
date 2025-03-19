@@ -15,4 +15,9 @@ export class ApiService {
       catchError(error => of((error)))
     );  
   }
+  getOptions(url: string): Observable<any[]> {
+    return this.http.get<any[]>(`${url}`).pipe(
+      catchError(error => of((error)))
+    );  
+  }
 }

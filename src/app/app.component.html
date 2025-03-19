@@ -1,1 +1,13 @@
-<app-dynamic-form [formData]="formJson"></app-dynamic-form>
+<div class="d-xl-flex my-4"> <!-- using bootstrap css grid system to arrange the JSON field and the form and to be responsive -->
+  <div class="col-12 col-xl-6 my-2 my-xl-0">
+    <textarea [formControl]="inputJson" placeholder="Paste JSON here" (blur)="formatJson()" class="json-textarea" [ngClass]="{'json-textarea-error' : inputJson.invalid}"></textarea>
+      @if (inputJson.hasError('required')) {
+        <small>JSON is required!</small>
+      } @else if (inputJson.hasError('invalidJson')) {
+        <small>Please format JSON correctly!</small>
+      }
+  </div>
+  <div class="col-12 col-xl-6 my-2 my-xl-0">
+    <app-dynamic-form [formData]="formJson"></app-dynamic-form>
+  </div>
+</div>

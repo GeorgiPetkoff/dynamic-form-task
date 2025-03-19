@@ -1,26 +1,73 @@
 <form [formGroup]="dynamicForm" (ngSubmit)="submit()">
-  <div *ngFor="let field of formData">
-    <ng-container *ngIf="!field.visibleIf || dynamicForm.get('userType')?.value === field.visibleIf['userType'].valueOf()">
+  <div *ngFor="let field of formData"> <!-- showing both structural directive like this ngfor and new block approach with @if, @switch -->
+    <!-- here i use ng-container not to add additional elements to the dom tree but to control show/hide fields with visibleIf condition-->
+     <!-- Here can i achieve improvement when i separate all this rules for showing different types in other component and to recursivly call to apply logic for nested groups because of not repetition -->
+    <ng-container *ngIf="!field.visibleIf || dynamicForm.get(field.visibleIf | keys)?.value === field.visibleIf[(field.visibleIf | keys)]"> 
       @switch (field.type) {
         @case ('input') {
-          <label>{{ field.label }}</label>
-          <input [formControlName]="field.name" [id]="field.name" type="text" />
+          <div class="row my-2"> <!-- using bootstrap css grid system to arrange my field to look good and will be responsive -->
+            <div class="col-4">
+              <label>{{ field.label }}</label>
+            </div>
+            <div class="col-8">
+              <input [formControlName]="field.name" [id]="field.name" type="text" />
+            </div>
+          </div>
+
         }
         @case ('dropdown') {
-          <label>{{ field.label }}</label>
           @if (field.name == 'country') {
-            <mat-select [id]="field.name" [formControlName]="field.name">
-              @for (option of lstCountries | async; track option) {
-                <mat-option [value]="option.name">{{ option.name }}</mat-option>
-              }
-            </mat-select>
-          } @else if (field.name != 'country') {
-          <mat-select [id]="field.name" [formControlName]="field.name">
-            @for (option of field.options; track option) {
-              <mat-option [value]="option">{{ option }}</mat-option>
-            }
-          </mat-select>
+            <div class="row my-2">
+              <div class="col-4">
+                <label>{{ field.label }}</label>
+              </div>
+              <div class="col-8">
+                <mat-select [id]="field.name" [formControlName]="field.name">
+                  @for (option of lstCountries | async; track option) {
+                    <mat-option [value]="option.id">{{ option.name }}</mat-option>
+                  }
+                </mat-select>
+              </div>
+            </div>
+          } @else {
+            <div class="row my-2">
+              <div class="col-4">
+                <label>{{ field.label }}</label>
+              </div>
+              <div class="col-8">
+                <mat-select [id]="field.name" [formControlName]="field.name">
+                  @for (option of field.options; track option) {
+                    <mat-option [value]="option">{{ option }}</mat-option>
+                  }
+                </mat-select>
+              </div>
+            </div>
           }
+        }
+        @case ('radio') {
+          <div class="row my-2">
+            <div class="col-4">
+              <label>{{ field.label }}</label>
+            </div>
+            <div class="col-8">
+              <div *ngFor="let option of field.options">
+                <label>
+                  <input type="radio" [formControlName]="field.name" [value]="option" /> {{ option }}
+                </label>
+              </div>
+            </div>
+          </div>
+        }
+
+        @case ('textarea') {
+          <div class="row my-2">
+            <div class="col-4">
+              <label>{{ field.label }}</label>
+            </div>
+            <div class="col-8">
+              <textarea [formControlName]="field.name" [id]="field.name"></textarea>
+            </div>
+          </div>
         }
         @case ('checkbox') {
           <label>
@@ -31,27 +78,78 @@
           <fieldset [formGroupName]="field.name">
             <legend>{{ field.label }}</legend>
             <div *ngFor="let nestedField of field.fields">
-              <label>{{ nestedField.label }}</label>
               @switch (nestedField.type) {
                 @case ('input') {
-                  <input [formControlName]="nestedField.name" [id]="nestedField.name" type="text" />
+                  <div class="row my-2">
+                    <div class="col-4">
+                      <label>{{ nestedField.label }}</label>
+                    </div>
+                    <div class="col-8">
+                      <input [formControlName]="nestedField.name" [id]="nestedField.name" type="text" />
+                    </div>
+                  </div>
                 }
                 @case ('dropdown') {
-                  <select [id]="nestedField.name" [formControlName]="nestedField.name">
-                    @for (option of nestedField.options; track option) {
-                      <option [value]="option">{{ option }}</option>
-                    }
-                  </select>
+                  <div class="row my-2">
+                    <div class="col-4">
+                      <label>{{ nestedField.label }}</label>
+                    </div>
+                    <div class="col-8">
+                      <mat-select [id]="nestedField.name" [formControlName]="nestedField.name">
+                        @for (option of nestedField.options; track option) {
+                          <mat-option [value]="option">{{ option }}</mat-option>
+                        }
+                      </mat-select>
+                    </div>
+                  </div>
+                }
+                @case ('radio') {
+                  <div class="row my-2">
+                    <div class="col-4">
+                      <label>{{ nestedField.label }}</label>
+                    </div>
+                    <div class="col-8">
+                      <div *ngFor="let option of nestedField.options">
+                        <label>
+                          <input type="radio" [formControlName]="nestedField.name" [value]="option" /> {{ option }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                }
+                @case ('textarea') {
+                  <div class="row my-2">
+                    <div class="col-4">
+                      <label>{{ nestedField.label }}</label>
+                    </div>
+                    <div class="col-8">
+                      <textarea [formControlName]="nestedField.name" [id]="nestedField.name"></textarea>
+                    </div>
+                  </div>
+                }
+                @case ('checkbox') {
+                  <label>
+                    <input type="checkbox" [formControlName]="nestedField.name"/> {{ nestedField.label }}
+                  </label>
                 }
               }
+              <div *ngIf="dynamicForm.get(`${field.name}.${nestedField.name}`)?.hasError('required') && (dynamicForm.get(`${field.name}.${nestedField.name}`)?.touched || submitError)">
+                <small>{{ nestedField.label }} is required.</small>
+              </div>
+              <div *ngIf="dynamicForm.get(`${field.name}.${nestedField.name}`)?.hasError('pattern') && (dynamicForm.get(`${field.name}.${nestedField.name}`)?.touched || submitError)">
+                <small>{{ nestedField.validations?.message }}</small>
+              </div>
             </div>
           </fieldset>
         }
       }
-      <div *ngIf="dynamicForm.controls[field.name].invalid && dynamicForm.controls[field.name].touched">
-        <small>{{ field.label }} is required.</small>
+      <div *ngIf="dynamicForm.controls[field.name].hasError('required') && (dynamicForm.controls[field.name].touched || submitError)">
+        <small [id]="field.name">{{ field.label }} is required.</small>
+      </div>
+      <div *ngIf="dynamicForm.controls[field.name].hasError('pattern') && (dynamicForm.controls[field.name].touched || submitError)">
+        <small>{{ field.validations?.message }}</small>
       </div>
     </ng-container>
   </div>
-  <button type="submit" >Submit</button>
+  <button type="submit">Submit</button>
 </form>
