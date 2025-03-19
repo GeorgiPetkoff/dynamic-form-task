@@ -34,7 +34,7 @@ export class DynamicFormComponent implements OnInit, OnChanges{
   
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['formData'] && changes['formData'].currentValue !== changes['formData'].previousValue) { // here is double check with distinctUntilChanged not to rebuild my form until the JSON is really changed
-      this.store.dispatch(autoSaveForm({ formData: cloneDeep(changes['formData'].currentValue) })); // dispatch the auto save to the global store when the JSON is changed
+      this.store.dispatch(autoSaveForm({ formData: cloneDeep(changes['formData'].currentValue) })); // dispatch the auto save to the global store when the JSON is changed, using to cloneDeep because i override some fields messages to show on form to the global state management and not to cause reference changes
       this.buildForm();
       this.dynamicForm.updateValueAndValidity();
     }
